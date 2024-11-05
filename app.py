@@ -40,6 +40,8 @@ def predict(text: str):
     predictions = model.predict(vec.reshape(1, -1))
     predicted_index = np.argmax(predictions)
     
+    print(text)
+
     # 긴급 fix
     # predicted_index = (predicted_index + 1) % len(vec)
     
