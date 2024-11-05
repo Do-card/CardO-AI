@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-# from pydantic import BaseModel
 import numpy as np
 from keras.models import load_model
 from gensim.models import Word2Vec
@@ -14,12 +13,7 @@ category_labels = np.load('model/indexed_categories.npy', allow_pickle=True)
 app = FastAPI()
 
 # 입력 데이터 모델 정의
-# class InputData(BaseModel):
-#     text: str
-
-# @app.post("/ai/predict")
-# def predict(data: InputData):
-@app.get("/ai/predict")
+@app.get("/predict")
 def predict(text: str):
     # 텍스트를 Word2Vec 벡터로 변환
     tokens = text.split()  # 단순한 토큰화 (필요 시 개선 가능)
