@@ -3,6 +3,7 @@ import numpy as np
 from keras.models import load_model
 from gensim.models import Word2Vec
 from Levenshtein import distance as levenshtein_distance
+from mecab import MeCab
 
 
 # 모델과 레이블 로드
@@ -11,12 +12,14 @@ word2vec_model = Word2Vec.load('model/word2vec.model')
 category_labels = np.load('model/indexed_categories.npy', allow_pickle=True)
 
 app = FastAPI()
+mecab = MeCab()
 
 # 입력 데이터 모델 정의
 @app.get("/predict")
 def predict(text: str):
     # 텍스트를 Word2Vec 벡터로 변환
-    tokens = text.split()  # 단순한 토큰화 (필요 시 개선 가능)
+    # tokens = text.split()  # 단순한 토큰화 (필요 시 개선 가능)
+    tokens = mecab.morphs(text)
     
     revens = []
 
@@ -28,13 +31,13 @@ def predict(text: str):
   
 
     # 입력 데이터 형상 확인
-    print("Input shape:", vec.shape)
+    # print("Input shape:", vec.shape)
     
     # AI 모델 예측
     predictions = model.predict(vec.reshape(1, -1))
     predicted_index = np.argmax(predictions)
     
-    print(text)
+    # print(text)
 
     # 긴급 fix
     # predicted_index = (predicted_index + 1) % len(vec)
