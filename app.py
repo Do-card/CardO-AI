@@ -4,7 +4,7 @@ from keras.models import load_model
 from gensim.models import Word2Vec
 from Levenshtein import distance as levenshtein_distance
 from mecab import MeCab
-
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # 모델과 레이블 로드
 model = load_model('model/my_model.keras')
@@ -13,6 +13,9 @@ category_labels = np.load('model/indexed_categories.npy', allow_pickle=True)
 
 app = FastAPI()
 mecab = MeCab()
+
+# Prometheus Instrumentator 설정
+Instrumentator().instrument(app).expose(app)
 
 # 입력 데이터 모델 정의
 @app.get("/predict")
